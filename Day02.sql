@@ -272,12 +272,6 @@ FROM EMPLOYEE;
 
 
 
-
-
-
-
-
-
 -- [실습 1]
 --  직급이 'J2'이면서 200만원 이상 받는 직원 이거나,
 --  직급이 'J7' 인 사원의 사번, 사원명, 직급코드, 급여
@@ -295,7 +289,7 @@ WHERE (JOB_CODE = 'J2' AND SALARY > 2000000) OR JOB_CODE = 'J7';
 
 SELECT EMP_ID AS 사번, EMP_NAME AS 사원명, JOB_CODE AS 직급코드, SALARY AS 급여, (SALARY*12) AS 연봉
 FROM EMPLOYEE
-WHERE JOB_CODE IN ('J7','J2') AND SALARY > 2000000;
+WHERE JOB_CODE IN ('J7','J2') AND SALARY >= 2000000;
 
 
 -- [실습 3]
@@ -320,7 +314,7 @@ FROM EMPLOYEE;
 -- 주민번호는 7번째 자리 이후 '*' 처리를 하여
 -- 조회 하시오.
 
-SELECT EMP_ID AS 사번, EMP_NAME AS 사원명, SUBSTR(EMAIL,1,INSTR(EMAIL ,'@')-1) AS 이메일, CONCAT(SUBSTR(EMP_NO,1,7),'*******')  AS 주민번호
+SELECT EMP_ID AS 사번, EMP_NAME AS 사원명, SUBSTR(EMAIL,1,INSTR(EMAIL ,'@')-1) AS 이메일, CONCAT(SUBSTR(EMP_NO,1,7),'*******')  AS 주민번호 --RPAD(SUBSTR(EMP_NO,1,7),14,'*')
 FROM EMPLOYEE;
 
 
