@@ -438,9 +438,18 @@ FROM EMPLOYEE;
 --3. 부서코드가 D5, D9인 직원들 중에서 2004년도에 입사한 직원의 
 --   수 조회함.
 --   사번 사원명 부서코드 입사일
-SELECT EMP_ID 사번, EMP_NAME 사원명, DEPT_CODE 부서명, HIRE_DATE 입사일
+SELECT EMP_ID 사번, EMP_NAME 사원명, DEPT_CODE 부서코드, HIRE_DATE 입사일
 FROM EMPLOYEE
 WHERE DEPT_CODE IN ('D5', 'D9') AND EXTRACT (YEAR FROM HIRE_DATE) = 2004;
+
+
+/*
+SELECT EMP_ID 사번, EMP_NAME 사원명,
+       DEPT_CODE 부서코드, HIRE_DATE 입사일
+FROM EMPLOYEE
+WHERE DEPT_CODE IN('D5', 'D9')
+AND SUBSTR(HIRE_DATE, 1, 2) = 04;
+ */
 
 --4. 직원명, 입사일, 입사한 달의 근무일수 조회
 --   단, 주말도 포함함
@@ -451,11 +460,22 @@ FROM EMPLOYEE;
 --   단, 생년월일은 주민번호에서 추출해서, 
 --   ㅇㅇ년 ㅇㅇ월 ㅇㅇ일로 출력되게 함.
 --   나이는 주민번호에서 추출해서 날짜데이터로 변환한 다음, 계산함
+--  (이상한 날짜 값이 들어간 사원들은 WHERE 조건절을 이용하여 제외)
 SELECT EMP_NAME AS 직원명,
 	   DEPT_CODE AS 부서코드, 
 	   TO_CHAR(TO_DATE(SUBSTR(EMP_NO, 1, 6), 'YYMMDD'), 'YY"년 "MM"월 "DD"일') AS "생년월일",
-	   FLOOR(MONTHS_BETWEEN(CURRENT_DATE, TO_DATE(SUBSTR(EMP_NO, 1, 6), 'YYMMDD')) / 12) AS "나이(만)"
-FROM EMPLOYEE; -- 달의 날짜는 1에서 말일 사이어야 하는데, DB중에 날짜가 31일을 넘는게 존재함
+	   FLOOR(MONTHS_BETWEEN(CURRENT_DATE, TO_DATE(SUBSTR(EMP_NO, 1, 6), 'RRMMDD')) / 12) AS "만 나이"
+FROM EMPLOYEE 
+WHERE EMP_ID NOT IN (200, 201, 214); -- 달의 날짜는 1에서 말일 사이어야 해서 이상한 날짜들은 제외
+
+SELECT EMP_NAME, DEPT_CODE, 
+      SUBSTR(EMP_NO, 1, 2) || '년 ' || 
+      SUBSTR(EMP_NO, 3, 2) || '월 ' || 
+      SUBSTR(EMP_NO, 5, 2) || '일 ' 생년월일,
+      EXTRACT(YEAR FROM SYSDATE) - 
+      EXTRACT(YEAR FROM(TO_DATE(SUBSTR(EMP_NO, 1, 6), 'RRMMDD'))) + 1 나이
+FROM EMPLOYEE
+WHERE EMP_ID NOT IN (200, 201, 214);
 
 --6. 직원들의 입사일로 부터 년도만 가지고, 각 년도별 입사인원수를 구하시오.
 --  아래의 년도에 입사한 인원수를 조회하시오.
@@ -511,6 +531,19 @@ SELECT 	EMP_ID 사번,
 								  'J7',SALARY*0.1,
 								  SALARY*0.05) "인상될 급여 정보"
 FROM EMPLOYEE;
+
+/*
+SELECT EMP_ID 사번,
+       EMP_NAME 사원명,
+       JOB_CODE 직급코드,
+       TO_CHAR(
+         SALARY * DECODE(JOB_CODE, 
+            'J5', 1.2, 'J6', 1.15, 'J7', 1.1, 1.05)
+           ,'L9,999,999') 인상급여
+FROM EMPLOYEE;
+ */
+
+
 -- CASE --
 SELECT 	EMP_ID 사번, 
 		EMP_NAME 사원명, 
@@ -539,3 +572,13 @@ FROM EMPLOYEE
 GROUP BY JOB_CODE
 HAVING COUNT(*)>3 
 ORDER BY COUNT(*) DESC; 
+
+/*
+SELECT JOB_CODE, SUM(SALARY), 
+       TRUNC(AVG(SALARY),-2),
+       COUNT(*)
+FROM EMPLOYEE
+GROUP BY JOB_CODE
+HAVING COUNT(*) > 3
+ORDER BY 4 DESC;
+*/

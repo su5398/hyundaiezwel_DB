@@ -174,5 +174,250 @@ JOIN LOCATION L ON(LOCATION_ID = LOCAL_CODE)
 WHERE JOB_NAME = '대리' AND LOCAL_NAME LIKE 'ASIA%';
 
 
+-- 한국(KO)과 일본(JP)에 근무하는 직원들의 정보 조회
+-- 사원명, 부서명, 지역명, 국가명
+-- NATIONAL 테이블 활용
+
+SELECT EMP_NAME 사원명, DEPT_TITLE 부서명, LOCAL_NAME 지역명, NATIONAL_NAME 국가명
+FROM EMPLOYEE E
+JOIN DEPARTMENT D ON(DEPT_CODE = DEPT_ID)
+JOIN LOCATION L ON(LOCATION_ID = LOCAL_CODE)
+JOIN NATIONAL N ON(L.NATIONAL_CODE = N.NATIONAL_CODE);
+WHERE NATIONAL_NAME IN ('한국','일본');
+
+
+
+
+
+
+
+
+-- Sub Query --
+-- 주가 되는 메일 쿼리 안에
+-- 조건이나 하나의 검색을 위한 또 다른 쿼리를 추가
+
+-- 최소 급여를 받는 사원의 정보 조회
+SELECT MIN(SALARY) FROM EMPLOYEE; 
+SELECT * FROM EMPLOYEE WHERE SALARY = 1380000;
+
+SELECT *
+FROM EMPLOYEE
+WHERE SALARY = (SELECT MIN(SALARY) FROM EMPLOYEE);
+
+
+-- 다중행 서브쿼리
+-- 결과값이 여러줄
+
+-- 직급 별 최소급여
+SELECT JOB_CODE, MIN(SALARY) 
+FROM EMPLOYEE
+GROUP BY JOB_CODE;
+
+-- 직급 별 최소급여를 받는 직원의 정보를 조회하자
+SELECT *
+FROM EMPLOYEE
+WHERE SALARY IN (SELECT MIN(SALARY)
+				FROM EMPLOYEE
+				GROUP BY JOB_CODE);
+			
+-- 다중행 다중열 서브쿼리
+-- 여러 커럼과 여러줄의 결과를 가지는 서브쿼리를 사용하여 조회
+
+SELECT JOB_CODE, MIN(SALARY) 
+FROM EMPLOYEE
+GROUP BY JOB_CODE;
+
+SELECT *
+FROM EMPLOYEE
+WHERE (JOB_CODE,SALARY) IN (SELECT JOB_CODE, MIN(SALARY)
+							FROM EMPLOYEE
+							GROUP BY JOB_CODE);
+
+
+-- 퇴사한 여직원과 같은 직급, 같은 부서에 근무하는 직원 정보 조회
+SELECT DEPT_CODE, JOB_CODE 
+FROM EMPLOYEE
+WHERE ENT_YN='Y';
+
+SELECT * FROM EMPLOYEE
+WHERE (DEPT_CODE, JOB_CODE) = (SELECT DEPT_CODE, JOB_CODE
+								FROM EMPLOYEE
+								WHERE ENT_YN = 'Y')
+	AND EMP_ID = (SELECT EMP_ID 
+					FROM EMPLOYEE
+					WHERE ENT_YN ='Y');
+				
+				
+--
+SELECT * FROM EMPLOYEE
+WHERE DEPT_CODE  = (SELECT DEPT_CODE FROM EMPLOYEE WHERE ENT_YN='Y')
+	AND JOB_CODE = (SELECT JOB_CODE FROM EMPLOYEE WHERE ENT_YN='Y')
+	AND EMP_ID <> (SELECT EMP_ID FROM EMPLOYEE WHERE ENT_YN='Y');
+
+
+-- 서브쿼리 사용 위치
+-- SELET, FROM, WHERE GROUP BY, HAVING, ORDER BY, JOIN..
+-- DML : INSERT, UPDATE, DELETE
+-- DDL : CREATE TABE, CREATE VIEW
+
+-- FROM 위치에 사용하는 서브쿼리
+-- INLINE VIEW(인라인 뷰)
+-- 테이블을 명으로 직접 조회하는 대신
+-- 서브쿼리의 결과셋(ResultSet)을 활용하여 조회가능
+
+-- 인라인 뷰를 활용한 데이터 조회
+SELECT * 
+FROM (
+	SELECT EMP_ID 아이디, EMP_NAME 이름, DEPT_TITLE 직급, JOB_NAME
+	FROM EMPLOYEE
+	JOIN DEPARTMENT ON(DEPT_CODE=DEPT_ID)
+	JOIN JOB USING(JOB_CODE)
+	);
+
+
+-- 가장 많이 팔린 책 상위 5개
+-- 가장 많이 주문된 음식 상위 3개
+
+-- ROWNUM : 데이터를 조회할 때 각 행위 번호를 매겨주는 함수
+SELECT ROWNUM, EMP_NAME, SALARY 
+FROM EMPLOYEE;
+
+SELECT ROWNUM, EMP_NAME, SALARY
+FROM EMPLOYEE
+WHERE ROWNUM<6;
+
+-- 급여 기준으로 가장 높은 급여를 받는 사원 상위 5명 조회
+-- 사번, 사원명, 급여를 출력
+SELECT EMP_ID 사번, EMP_NAME 사원명, SALARY 급여
+FROM EMPLOYEE
+WHERE ROWNUM<=5
+ORDER BY SALARY DESC;
+
+-- ROWNUM은 FROM에서 실행할 때 번호가 매겨진다.
+
+SELECT EMP_ID 사번, EMP_NAME 사원명, SALARY 급여
+FROM (SELECT EMP_ID, EMP_NAME, SALARY
+    FROM EMPLOYEE
+    ORDER BY SALARY DESC)
+WHERE ROWNUM<=5;
+
+SELECT ROWNUM, A.*
+FROM (
+		SELECT EMP_ID, EMP_NAME, SALARY
+    	FROM EMPLOYEE
+    	ORDER BY SALARY DESC
+    	)A
+WHERE ROWNUM<6;
+
+
+-- RANK() 함수, DENSE_RANK() 함수
+
+
+-- RANK() : 동일한 순이 있을 경우 이후의 순번은 이전 동일한 순번의 개수만큼 건너뛰고 순번을 매긴다.
+--1
+--2
+--2
+--4
+SELECT EMP_NAME, SALARY,
+		RANK() OVER(ORDER BY SALARY DESC) 순위
+FROM EMPLOYEE;
+
+SELECT *
+FROM (
+		SELECT EMP_NAME, SALARY,
+				 RANK() OVER(ORDER BY SALARY DESC) 순위
+		FROM EMPLOYEE
+		)
+WHERE 순위 < 4;
+
+
+-- DENSE_RANK() : 동일한 순번이 있을 경우 이후 순번에 여향을 미치지 않는다.
+--1
+--2
+--2
+--3
+SELECT EMP_NAME, SALARY,
+		DENSE_RANK() OVER(ORDER BY SALARY DESC) 순위
+FROM EMPLOYEE;
+		
+
+-- 상호 연관 쿼리 : 상관쿼리
+-- 일반적으로 서브쿼리 서브쿼리대로, 메인쿼리, 서브 쿼리의 결과만을 받아서 실행
+-- 메인 쿼리가 사용하는 컬럼값, 계산 등을 서브쿼리에 적용하여 서브쿼리 실행시
+-- 메인 쿼리의 값도 함께 사용하는 방식
+
+-- 사원의 직급에 따른 급여 평균 보다 많이 받는 사원의 정보를 조회.
+SELECT EMP_ID, EMP_NAME, JOB_CODE, SALARY
+FROM EMPLOYEE E
+WHERE SALARY > (
+				SELECT AVG(SALARY)
+				FROM EMPLOYEE E2
+				WHERE E.JOB_CODE = E2.JOB_CODE
+				);
+
+
+-- SELECT에 서브쿼리
+-- 모든 사원의 사번, 사원명, 관리자 사번, 관리자 명을 조회
+SELECT EMP_ID, EMP_NAME, MANAGER_ID,
+		(SELECT EMP_NAME FROM EMPLOYEE M WHERE E.MANAGER_ID = M.EMP_ID) "관리자 이름"
+FROM EMPLOYEE E;
+
+SELECT CONCAT(EMP_NAME, EMP_ID)
+FROM EMPLOYEE;
+
+-- 자신이 속한 직급의 평균 급여보다 많이 받는 사원의
+-- 이름(EMP_NAME), 직급명(JOB_NAME), 급여정보(SALARY) 조회
+SELECT EMP_NAME, JOB_NAME, SALARY
+FROM EMPLOYEE E
+JOIN JOB J ON (J.JOB_CODE=E.JOB_CODE)
+WHERE SALARY > (
+				SELECT AVG(SALARY)
+				FROM EMPLOYEE E2
+				WHERE E.JOB_CODE = E2.JOB_CODE
+			);
+
+
+
+-- -------------
+-- CREATE : 데이터베이스의 객체를 생성하는 DDL
+-- CREATE 객체 객체명 (관련 내용...)
+		
+-- 계정 생성
+-- CREATE USER MULTI IDENTIFIED BY MULTI
+
+-- 테이블 생성
+-- CREATE TABLE TEST(
+--	컬럼명 자료형 (길이) 제약조건
+--);
+
+-- 테이블 생성
+-- CREATE TABLE TEST(
+--	컬럼명 자료형(길이) 제약조건,
+--  컬럼명 자료형(길이) 제약조건,
+--  컬럼명 자료형(길이) 제약조건,
+--	...
+--);
+		
+		
+/*
+ * 제약조건 : 테이블에 데이터를 저장하고자 할 때 지켜야 하는 규칙
+ * NOT NULL - NULL 값을 허용하지 않겠다. (필수 입력 사항)
+ * UNIQUE - 중복값을 허용하지 않는다.
+ * CHECK - 지정한 입력사항 외에는 값을 저장하지 못하게 막는 조건
+ * PRIMARY KEY - (NOT NULL + UNIQUE)
+ * 				테이블 내에서 해당하는 행을 인식할 수 있는 고유 값 
+ * 				테이블 내에서 단 1개만 존재
+ * FOREIGN KEY - 다른 테이블에서 저장된 값을 연결 지어서 참조로 가져오는 데이터에 지정하는 제약조건
+ * 
+ * 
+ */		
+		
+		
+		
+		
+		
+
+
+
 
 
