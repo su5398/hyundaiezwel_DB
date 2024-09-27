@@ -73,3 +73,6 @@ NOCACHE;
 SELECT * FROM MYBOARD;
 
 INSERT INTO MYBOARD VALUES(SEQ_MYBOARD.NEXTVAL, '관리자','게시판 테스트','테스트 중입니다.1234567ABCD',CURRENT_DATE);
+
+---------------------------------
+
