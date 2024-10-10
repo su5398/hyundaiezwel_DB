@@ -337,6 +337,10 @@ VALUES(SEQ_MVCBOARD.NEXTVAL, '관리자','테스트 중','테스트 1234 ABCD','
 
 SELECT * FROM MVCBOARD;
 
+----------------------------------
+
+
+
 
 
 
