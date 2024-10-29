@@ -1,0 +1,61 @@
+2024-10-29 15:36:52.857 - DBeaver 24.2.0.202409011551 is starting
+2024-10-29 15:36:52.859 - OS: Windows 11 10.0 (amd64)
+2024-10-29 15:36:52.860 - Java version: 17.0.6 by Eclipse Adoptium (64bit)
+2024-10-29 15:36:52.860 - Install path: 'C:\Program Files\DBeaver'
+2024-10-29 15:36:52.860 - Instance path: 'file:/C:/Users/Kweon/Desktop/HyundaiEzwel_Multicampus/03_DB/'
+2024-10-29 15:36:52.863 - Memory available 64Mb/1024Mb
+2024-10-29 15:36:52.873 - Create display
+2024-10-29 15:36:52.964 - Initialize desktop platform...
+2024-10-29 15:36:53.043 - BounceCastle bundle found. Use JCE provider BC
+> Start Core File Systems [org.eclipse.core.filesystem 1.10.400.v20240426-1040]
+> Start Core Resource Management [org.eclipse.core.resources 3.20.200.v20240513-1323]
+> Start 팀 지원 핵심 [org.eclipse.team.core 3.10.400.v20240413-1529]
+> Start DBeaver UI Navigator [org.jkiss.dbeaver.ui.navigator 1.0.138.202409011551]
+2024-10-29 15:36:53.194 - Initialize base platform...
+2024-10-29 15:36:53.212 - Platform initialized (248ms)
+> Start DBeaver UI Editors - Base [org.jkiss.dbeaver.ui.editors.base 1.0.138.202409011551]
+2024-10-29 15:36:53.261 - Starting instance server at http://localhost:2037
+2024-10-29 15:36:53.266 - Run workbench
+> Start Eclipse e4 작업영역 SWT [org.eclipse.e4.ui.workbench.swt 0.17.400.v20240425-0840]
+> Start Eclipse Application Services [org.eclipse.e4.core.services 2.4.400.v20240413-1529]
+> Start Eclipse UI Application Services [org.eclipse.e4.ui.services 1.6.300.v20231201-1637]
+> Start Eclipse e4 Progress View [org.eclipse.e4.ui.progress 0.4.400.v20240424-0956]
+> Start Eclipse Bindings Support [org.eclipse.e4.ui.bindings 0.14.400.v20240321-1245]
+> Start Eclipse e4 core commands [org.eclipse.e4.core.commands 1.1.400.v20240424-0444]
+> Start EMF XML/XMI Persistence [org.eclipse.emf.ecore.xmi 2.37.0.v20231208-1346]
+> Start Eclipse CSS SWT Theme Support [org.eclipse.e4.ui.css.swt.theme 0.14.400.v20240424-0956]
+> Start Eclipse e4 작업영역 기능 추가 [org.eclipse.e4.ui.workbench.addons.swt 1.5.400.v20240416-0658]
+Warning: NLS unused message: 이유 in: org.eclipse.ui.internal.messages
+> Start Eclipse e4 작업영역 SWT 렌더러 [org.eclipse.e4.ui.workbench.renderers.swt 0.16.400.v20240418-1547]
+> Start Eclipse Dependency Injection Extensions [org.eclipse.e4.core.di.extensions 0.18.300.v20240413-1529]
+> Start Eclipse CSS SWT Support [org.eclipse.e4.ui.css.swt 0.15.400.v20240321-1245]
+> Start 기본 문서 편집기 [org.eclipse.ui.editors 3.17.300.v20240524-2010]
+> Start 텍스트 편집기 프레임워크 [org.eclipse.ui.workbench.texteditor 3.17.400.v20240524-2010]
+2024-10-29 15:36:54.624 - Configure workbench window
+> Start DBeaver SQL Model [org.jkiss.dbeaver.model.sql 1.0.128.202409011551]
+2024-10-29 15:36:54.745 - Total database drivers: 119 (119)
+> Start 도움말 시스템 코어 [org.eclipse.help 3.10.400.v20240415-0528]
+2024-10-29 15:36:54.811 - Create actions
+2024-10-29 15:36:54.816 - Disable Eclipse action set 'org.eclipse.ui.edit.text.actionSet.annotationNavigation'
+2024-10-29 15:36:54.817 - Disable Eclipse action set 'org.eclipse.ui.WorkingSetActionSet'
+2024-10-29 15:36:54.817 - Disable Eclipse action set 'org.eclipse.ui.actionSet.openFiles'
+2024-10-29 15:36:54.818 - Create workbench actions
+2024-10-29 15:36:55.122 - Initialize workbench window
+2024-10-29 15:36:55.127 - Finish initialization
+> Start DBeaver UI Editors - Data [org.jkiss.dbeaver.ui.editors.data 1.0.138.202409011551]
+> Start 인터넷 연결 관리 사용자 인터페이스 [org.eclipse.ui.net 1.5.400.v20240413-1529]
+> Start Internet Connection Management [org.eclipse.core.net 1.5.400.v20240413-1529]
+Warning: NLS unused message: actions_navigator__objects in: org.jkiss.dbeaver.ui.editors.sql.internal.SQLEditorMessages
+> Start DBeaver UI Editors - SQL [org.jkiss.dbeaver.ui.editors.sql 1.0.138.202409011551]
+> Start DBeaver Sample Database [org.jkiss.dbeaver.ext.sample.database 1.0.175.202409011551]
+> Start DBeaver Tip of the day [org.jkiss.dbeaver.ext.ui.tipoftheday 1.0.144.202409011551]
+> Start GEF Classic Draw2d [org.eclipse.draw2d 3.16.0.202405290843]
+> Start GEF Classic GEF (MVC) [org.eclipse.gef 3.18.0.202405290843]
+> Start DBeaver ERD UI [org.jkiss.dbeaver.erd.ui 3.0.98.202409011551]
+> Start DBeaver ERD Model [org.jkiss.dbeaver.erd.model 1.0.98.202409011551]
+> Start DBeaver Dashboard UI [org.jkiss.dbeaver.ui.dashboard 1.0.135.202409011551]
+> Start DBeaver Dashboards Model [org.jkiss.dbeaver.model.dashboard 1.0.11.202409011551]
+2024-10-29 15:37:23.415 - DBeaver is stopping
+2024-10-29 15:37:23.416 - Stop instance server
+2024-10-29 15:37:24.426 - Instance server has been stopped
+2024-10-29 15:37:24.426 - DBeaver shutdown completed
